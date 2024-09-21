@@ -1,16 +1,16 @@
 # tcg_op
 
-A new Flutter project.
+A project to practice Flutter development.
 
-## Getting Started
+## What this app will do
 
-This project is a starting point for a Flutter application.
+This project is just to learn and practice Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+This app will show all the cards of the One Piece TCG. The point is:
+  - List and filter cards
+  - Create and save new decks
+  - Edit those decks
+  - Maybe in future will add more funtionality
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The API to get the card info is:
+  - https://www.apitcg.com/api/one-piece/cards
