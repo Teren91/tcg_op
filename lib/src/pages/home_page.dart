@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tcg_op/src/controllers/card_data_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tcg_op/src/models/cards_data.dart';
+import 'package:tcg_op/src/widgets/card_list_widget.dart';
 import 'package:tcg_op/src/widgets/filter_widget.dart';
 
 
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int offset = 2;
-  bool isFiltering = true;
+  bool isFiltering = false;
 
   @override
   void initState() {
@@ -97,52 +97,13 @@ class _HomePageState extends State<HomePage> {
                 builder:(context, snapshot) {
                   if(snapshot.hasError){
                     return const Center(child: Text('Error: &{snapshot.error}'));
-                  }
-              
+                  }              
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
-                  }
-                  
-                final cards = snapshot.data as List<CardsData>;
+                  }                  
+                  final cards = snapshot.data as List<CardsData>;
               
-                  return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 1,
-                    ),
-                    itemCount: cards.length,
-                    itemBuilder: (context, index) 
-                    {
-                      final card = cards[index];
-                  
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 25.0, right: 25),
-                        child: Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.all(5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          
-                          child: Column(
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: card.imgUrl!,
-                                fit: BoxFit.contain,
-                                
-                                width: 220,
-                                height: 190,
-                                placeholder: (context, url) => const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => const Icon(Icons.error), 
-                              ),
-                            ],
-                          ),                    
-                        ),
-                      );
-                    },
-                  );
+                  return CardListWidget(cards: cards);
                 },
               ),
             ),

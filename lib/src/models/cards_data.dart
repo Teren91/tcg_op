@@ -47,7 +47,7 @@ class CardsData {
     family: json['family'],
     ability: json['ability'],
     trigger: json['trigger'],
-    cardSet: json['cardSet'],
+    cardSet: json['set']['name'],
   );
 
   Map<String, dynamic> toJson() => {
