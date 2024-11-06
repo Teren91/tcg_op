@@ -18,19 +18,16 @@ class CardDataService {
         '/api/one-piece/cards',
         {'property': 'id', 'value': '-'}
       ); //Propiedad genérica para obtener todos los datos
-
-      
+  
       final response = await http.get(
         basicUrl, 
         headers:{'x-api-key': _apiKey}
       );
 
      if (response.statusCode == 200) {
-  
-       final jsonResponse = json.decode(response.body);
-
-       final cardDataList = jsonResponse['data'] as List;
-      cards = cardDataList.map((cardData) => CardsData.fromJson(cardData)).toList();
+        final jsonResponse = json.decode(response.body);
+        final cardDataList = jsonResponse['data'] as List;
+        cards = cardDataList.map((cardData) => CardsData.fromJson(cardData)).toList();
      }
    } catch (e) {
 
@@ -52,7 +49,6 @@ class CardDataService {
         final cardData = json.decode(response.body);
         card = CardsData.fromJson(cardData);
       }
-      
     }
     catch(e){
       rethrow;
