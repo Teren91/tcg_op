@@ -2,24 +2,28 @@
 import 'package:tcg_op/src/models/cards_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CardDataService {
 
   static const String _baseUrl = 'https://www.apitcg.com/api/one-piece/cards';
-  
+  static final String _apiKey = dotenv.env['API_KEY']!;
+
   Future<List<CardsData>> getAllCards({int offset = 0}) async {
    List<CardsData> cards = [];
 
-    //Uri url = Uri.parse('$_baseUrl?property=name&value=yamato');
-    
    try {
-    //https://www.apitcg.com/api/one-piece/cards
+      Uri basicUrl = Uri.https(
+        'www.apitcg.com', 
+        '/api/one-piece/cards',
+        {'property': 'id', 'value': '-'}
+      ); //Propiedad genérica para obtener todos los datos
 
-  
-      Uri basicUrl = Uri.https('www.apitcg.com', '/api/one-piece/cards',
-      {'property': 'id', 'value': '-'}); //Propiedad genérica para obtener todos los datos
-
-     final response = await http.get(basicUrl);
+      
+      final response = await http.get(
+        basicUrl, 
+        headers:{'x-api-key': _apiKey}
+      );
 
      if (response.statusCode == 200) {
   
@@ -27,7 +31,6 @@ class CardDataService {
 
        final cardDataList = jsonResponse['data'] as List;
       cards = cardDataList.map((cardData) => CardsData.fromJson(cardData)).toList();
-       ///cards = jsonResponse.map((e) => CardsData.fromJson(e)).toList();
      }
    } catch (e) {
 
