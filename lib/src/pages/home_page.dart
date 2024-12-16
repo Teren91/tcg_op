@@ -100,10 +100,16 @@ class _HomePageState extends State<HomePage> {
                   }              
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
-                  }                  
-                  final cards = snapshot.data as List<CardsData>;
-              
-                  return CardListWidget(cards: cards);
+                  }    
+                  // if(snapshot.connectionState == ConnectionState.waiting)
+                  // {
+                  //   return const Center(child: CircularProgressIndicator());
+                  // }else{
+                  //   final cards = snapshot.data as List<CardsData>;
+                  //   return CardListWidget(cards: cards);
+                  // }           
+                final cards = snapshot.data as List<CardsData>;
+               return CardListWidget(cards: cards);
                 },
               ),
             ),

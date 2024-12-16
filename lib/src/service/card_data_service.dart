@@ -1,4 +1,5 @@
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcg_op/src/models/cards_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,10 +10,23 @@ class CardDataService {
   static const String _baseUrl = 'https://www.apitcg.com/api/one-piece/cards';
   static final String _apiKey = dotenv.env['API_KEY']!;
 
+  static const String _cacheKey = 'cards_cache';
+
   Future<List<CardsData>> getAllCards({int offset = 0}) async {
    List<CardsData> cards = [];
 
    try {
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? cachedData = prefs.getString(_cacheKey);
+
+      if(cachedData != null)
+      {
+        final List<dynamic> decodedData = jsonDecode(cachedData);
+        final List<CardsData> cardsData = decodedData.map((e) => CardsData.fromJson(e)).toList();
+        return cardsData;
+      }
+
       Uri basicUrl = Uri.https(
         'www.apitcg.com', 
         '/api/one-piece/cards',
@@ -28,6 +42,7 @@ class CardDataService {
         final jsonResponse = json.decode(response.body);
         final cardDataList = jsonResponse['data'] as List;
         cards = cardDataList.map((cardData) => CardsData.fromJson(cardData)).toList();
+        prefs.setString(_cacheKey, jsonEncode(cards));
      }
    } catch (e) {
 
