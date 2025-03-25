@@ -20,12 +20,14 @@ class CardDataService {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? cachedData = prefs.getString(_cacheKey);
 
-      // if(cachedData != null)
-      // {
-      //   final List<dynamic> decodedData = jsonDecode(cachedData);
-      //   final List<CardsData> cardsData = decodedData.map((e) => CardsData.fromJson(e)).toList();
-      //   return cardsData;
-      // }
+      if(cachedData != null)
+      {
+        final List<dynamic> decodedData = jsonDecode(cachedData);
+        final List<CardsData> cardsData = decodedData
+          .map((e) => CardsData.fromJson(e))
+          .toList();
+        return cardsData;
+      }
 
       Uri basicUrl = Uri.https(
         'www.apitcg.com', 
