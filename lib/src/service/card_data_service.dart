@@ -20,17 +20,18 @@ class CardDataService {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? cachedData = prefs.getString(_cacheKey);
 
-      if(cachedData != null)
-      {
-        final List<dynamic> decodedData = jsonDecode(cachedData);
-        final List<CardsData> cardsData = decodedData.map((e) => CardsData.fromJson(e)).toList();
-        return cardsData;
-      }
+      // if(cachedData != null)
+      // {
+      //   final List<dynamic> decodedData = jsonDecode(cachedData);
+      //   final List<CardsData> cardsData = decodedData.map((e) => CardsData.fromJson(e)).toList();
+      //   return cardsData;
+      // }
 
       Uri basicUrl = Uri.https(
         'www.apitcg.com', 
         '/api/one-piece/cards',
-        {'property': 'id', 'value': '-'}
+        //{'property': 'id', 'value': '-'}
+        {'id': '-'}
       ); //Propiedad genérica para obtener todos los datos
   
       final response = await http.get(
