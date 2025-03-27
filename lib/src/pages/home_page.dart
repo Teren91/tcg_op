@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tcg_op/src/controllers/card_data_controller.dart';
 import 'package:tcg_op/src/models/cards_data.dart';
+import 'package:tcg_op/src/service/deck_data_service.dart';
 import 'package:tcg_op/src/widgets/card_list_widget.dart';
+import 'package:tcg_op/src/widgets/deck_creation_widget.dart';
 import 'package:tcg_op/src/widgets/filter_widget.dart';
 
 
@@ -77,8 +79,17 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black,
             ),
             IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.edit_square),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (_) => DeckDataService(),
+                      child: DeckCreationWidget(cards: cardDataController.cardsDataList),),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.create),
               color: Colors.black,
             ),
             IconButton(
