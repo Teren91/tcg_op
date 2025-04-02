@@ -39,7 +39,7 @@ class CardsData {
     rarity: json['rarity'],
     type: json['type'],
     name: json['name'],
-    imgUrl: json['images']['large'],
+    imgUrl: json['images'] != null ? json['images']['large'] : null,
     cost: json['cost'],
     power: json['power'],
     counter: json['counter'],

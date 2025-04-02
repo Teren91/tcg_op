@@ -20,20 +20,36 @@ class CardDataService {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? cachedData = prefs.getString(_cacheKey);
 
-      if(cachedData != null)
+      if(cachedData != null && cachedData.isNotEmpty)
       {
-        final List<dynamic> decodedData = jsonDecode(cachedData);
-        final List<CardsData> cardsData = decodedData
-          .map((e) => CardsData.fromJson(e))
-          .toList();
-        return cardsData;
+        try {
+          final List<dynamic> decodedData = jsonDecode(cachedData);
+          final List<CardsData> cardsData = decodedData
+            .map((e) => CardsData.fromJson(e))
+            .toList();
+         
+          if(cardsData.isNotEmpty) {
+            return cardsData;
+          }
+        } catch (e) {
+          // Handle JSON parsing error
+          prefs.remove(_cacheKey); // Clear the cache if parsing fails
+        }
+        
       }
 
       Uri basicUrl = Uri.https(
         'www.apitcg.com', 
         '/api/one-piece/cards',
-        //{'property': 'id', 'value': '-'}
-        {'id': '-'}
+        {
+          'property': 'id', 
+          'value': '-',
+          'limit': '100',
+          'page': '10'
+        },
+          
+        //{'id': '-'}
+
       ); //Propiedad genérica para obtener todos los datos
   
       final response = await http.get(
@@ -44,8 +60,10 @@ class CardDataService {
      if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final cardDataList = jsonResponse['data'] as List;
-        cards = cardDataList.map((cardData) => CardsData.fromJson(cardData)).toList();
-        prefs.setString(_cacheKey, jsonEncode(cards));
+        cards = cardDataList
+          .map((cardData) => CardsData.fromJson(cardData))
+          .toList();
+        prefs.setString(_cacheKey, jsonEncode(cardDataList).toString());
      }
    } catch (e) {
 
@@ -67,6 +85,9 @@ class CardDataService {
         final cardData = json.decode(response.body);
         card = CardsData.fromJson(cardData);
       }
+      else{
+        throw Exception('Error getting card ${response.statusCode}');
+      }
     }
     catch(e){
       rethrow;
@@ -85,6 +106,9 @@ class CardDataService {
         final jsonResponse = json.decode(response.body)['data'] as List;
         cards = jsonResponse.map((e) => CardsData.fromJson(e)).toList();
       }
+      else{
+        throw Exception('Error getting card ${response.statusCode}');
+      }
     } catch (e) {
       rethrow;
     }
@@ -102,6 +126,8 @@ class CardDataService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body)['data'] as List;
         cards = jsonResponse.map((e) => CardsData.fromJson(e)).toList();
+      }else{
+        throw Exception('Error getting card ${response.statusCode}');
       }
     } catch (e) {
       rethrow;
@@ -120,6 +146,8 @@ class CardDataService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body)['data'] as List;
         cards = jsonResponse.map((e) => CardsData.fromJson(e)).toList();
+      }else{
+        throw Exception('Error getting card ${response.statusCode}');
       }
     } catch (e) {
       rethrow;
@@ -128,7 +156,7 @@ class CardDataService {
     return cards;
   }
 
-    Future<List<CardsData>> getCardByPower(int power) async {
+  Future<List<CardsData>> getCardByPower(int power) async {
     List<CardsData> cards = [];
 
     try {
@@ -138,6 +166,8 @@ class CardDataService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body)['data'] as List;
         cards = jsonResponse.map((e) => CardsData.fromJson(e)).toList();
+      }else{
+        throw Exception('Error getting card ${response.statusCode}');
       }
     } catch (e) {
       rethrow;
